@@ -1,6 +1,3 @@
 {
-    "app name" : "project1 - development",
-    "database" :{
-        "address" : ""
-    }
+    "app name" : "project1 - development"
 }
