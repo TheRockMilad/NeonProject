@@ -1,11 +1,11 @@
 const { validationResult } = require("express-validator");
-const autoBind = require('auto-bind')
-const User = require('./../model/users')
+const autoBind = require("auto-bind");
+const User = require("./../model/users");
 
 module.exports = class {
   constructor() {
-    autoBind(this)
-    this.User = User
+    autoBind(this);
+    this.User = User;
   }
   validationBody(req, res) {
     const result = validationResult(req);
@@ -29,5 +29,12 @@ module.exports = class {
       return;
     }
     next();
+  }
+
+  response({ res, message, code = 200, data = [] }) {
+    res.status(code).json({
+      message,
+      data,
+    });
   }
 };
