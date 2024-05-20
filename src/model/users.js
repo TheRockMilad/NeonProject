@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   isActive: { type: Boolean, default: false },
   avatarUrl: { type: String, required: false }
-});
+}); 
 
 mongoose.plugin(timestamp);
 
