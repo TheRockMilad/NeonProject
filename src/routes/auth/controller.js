@@ -1,6 +1,7 @@
 const controller = require("./../controller");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 module.exports = new (class extends controller {
   async register(req, res) {
@@ -33,7 +34,31 @@ module.exports = new (class extends controller {
     }
   }
 
-  login(req, res) {
-    res.send("login");
+  async login(req, res) {
+    const user = await this.User.findOne({ email: req.body.email });
+    if (!user) {
+      return this.response({
+        res,
+        code: 400,
+        message: "invalid Email or password",
+      });
+    }
+    decoded = bcrypt.compare(req.body.password, user.password);
+    if (!decoded) {
+      return this.response({
+        res,
+        code: 400,
+        message: "invalid Email or password",
+      });
+    }
+    const token = await jwt.sign({ _id: user.id }, config.get("jwt"), {
+      expiresIn: "1h",
+    });
+    this.response({
+      res,
+      code: 400,
+      message: "Successfull logged in",
+      data: { token },
+    });
   }
 })();
