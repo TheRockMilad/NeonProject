@@ -7,6 +7,7 @@
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
     "mongoose": "^8.4.0",
     "mongoose-timestamp": "^0.6.0",
     "nodemon": "^3.1.0"
