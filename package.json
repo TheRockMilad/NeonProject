@@ -15,7 +15,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "set debug=app:main && nodemon index"
+    "start": "set debug=app:main,db:main && nodemon index"
   },
   "author": "Milad Hosseini",
   "license": "ISC",
