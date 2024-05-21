@@ -1,7 +1,6 @@
 const { User, response } = require("../routes/auth/controller");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const { find } = require("lodash");
 
 async function isLoggined(req, res, next) {
   const token = req.cookies.authToken;
@@ -16,4 +15,8 @@ async function isLoggined(req, res, next) {
   const user = User.findById(decoded._id);
   req.user = user;
   next();
+}
+
+module.exports = {
+    isLoggined
 }
