@@ -3,6 +3,7 @@
     "auto-bind": "^4.0.0",
     "bcrypt": "^5.1.1",
     "config": "^3.3.11",
+    "cookie-parser": "^1.4.6",
     "debug": "^4.3.4",
     "express": "^4.19.2",
     "express-validator": "^7.1.0",
