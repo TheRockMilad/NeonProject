@@ -5,10 +5,12 @@ const dbdebug = require("debug")("db:main");
 const router = require("./src/routes");
 const mongoose = require("mongoose");
 const config = require("config");
+const cookieParser = require('cookie-parser')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use(cookieParser())
 
 app.use("/api", router);
 

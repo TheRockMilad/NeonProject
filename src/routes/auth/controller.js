@@ -52,9 +52,11 @@ module.exports = new (class extends controller {
         message: "invalid Email or password",
       });
     }
+    res.clearCookie("authToken  ")
     const token = await jwt.sign({ _id: user.id }, config.get("jwt"), {
       expiresIn: "1h",
     });
+    res.cookie('authToken',token,{maxAge : 3600000 , httpOnly : true,})
     this.response({
       res,
       code: 200,
