@@ -2,6 +2,7 @@ const controller = require("./../controller");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const config = require('config')
 
 module.exports = new (class extends controller {
   async register(req, res) {
@@ -43,7 +44,7 @@ module.exports = new (class extends controller {
         message: "invalid Email or password",
       });
     }
-    decoded = bcrypt.compare(req.body.password, user.password);
+    const decoded = bcrypt.compare(req.body.password, user.password);
     if (!decoded) {
       return this.response({
         res,
@@ -56,7 +57,7 @@ module.exports = new (class extends controller {
     });
     this.response({
       res,
-      code: 400,
+      code: 200,
       message: "Successfull logged in",
       data: { token },
     });
