@@ -1,10 +1,12 @@
-const express = require('express')
-const router = express.Router()
-const authRouter = require('./auth')
-const userRouter = require('./user')
-const {isLoggined} = require('./../middleware/auth')
+const express = require("express");
+const router = express.Router();
+const authRouter = require("./auth");
+const userRouter = require("./user");
+const adminRouter = require("./admin");
+const { isLoggined, isAdmin } = require("./../middleware/auth");
 
-router.use('/auth',authRouter)
-router.use('/user',isLoggined,userRouter)
+router.use("/auth", authRouter);
+router.use("/user", isLoggined, userRouter);
+router.use("/admin", isLoggined, isAdmin, adminRouter);
 
-module.exports = router
+module.exports = router;
