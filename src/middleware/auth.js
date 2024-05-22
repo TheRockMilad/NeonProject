@@ -17,6 +17,14 @@ async function isLoggined(req, res, next) {
   next();
 }
 
-module.exports = {
-    isLoggined
+async function isAdmin(req, res, next) {
+  if (!req.user.isAdmin) {
+    return response({ res, message: "Access denied" });
+  }
+  next();
 }
+
+module.exports = {
+  isLoggined,
+  isAdmin
+};
