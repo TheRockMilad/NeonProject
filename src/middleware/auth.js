@@ -11,8 +11,8 @@ async function isLoggined(req, res, next) {
       message: "access denied",
     });
   }
-  const decoded = jwt.verify(token, config.get(jwt));
-  const user = User.findById(decoded._id);
+  const decoded = jwt.verify(token, config.get("jwt"));
+  const user = await User.findById(decoded._id);
   req.user = user;
   next();
 }
