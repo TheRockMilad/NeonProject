@@ -1,2 +1,2 @@
 Api project (Node.js)
-Test
+Registration and authentication training
