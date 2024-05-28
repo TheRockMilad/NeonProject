@@ -37,7 +37,29 @@ module.exports = new (class extends controller {
     }
   }
   async showAllArticle(req, res) {
-    res.send(`show article`);
+    try {
+      const articles = await this.Article.find()
+        .populate('author', 'name') // اینجا نام کاربر را دریافت می‌کنیم
+        .select('title content createdAt'); // انتخاب فیلدهای مورد نظر از مقاله
+  
+      this.response({
+        res,
+        code: 200,
+        message: "Articles fetched successfully",
+        data: articles.map(article => ({
+          author: article.author.name,
+          title: article.title,
+          content: article.content,
+          createdAt: article.createdAt
+        }))
+      });
+    } catch (error) {
+      this.response({
+        res,
+        code: 500,
+        message: "Error fetching articles",
+      });
+    }
   }
   async editArticle(req, res) {
     res.send(`edit article`);
