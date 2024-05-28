@@ -44,7 +44,7 @@ module.exports = new (class extends controller {
         message: "invalid Email or password",
       });
     }
-    const decoded = bcrypt.compare(req.body.password, user.password);
+    const decoded = await bcrypt.compare(req.body.password, user.password);
     if (!decoded) {
       return this.response({
         res,
@@ -52,7 +52,7 @@ module.exports = new (class extends controller {
         message: "invalid Email or password",
       });
     }
-    res.clearCookie("authToken  ")
+    res.clearCookie("authToken")
     const token = await jwt.sign({ _id: user.id }, config.get("jwt"), {
       expiresIn: "1h",
     });
