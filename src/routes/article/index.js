@@ -16,3 +16,4 @@ router.put("/:articleId", isAuthor, controller.editArticle);
 router.delete("/:articleId", controller.deleteArticle);
 
 module.exports = router;
+
