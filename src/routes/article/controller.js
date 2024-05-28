@@ -61,6 +61,26 @@ module.exports = new (class extends controller {
       });
     }
   }
+  async userArticle(req, res) {
+    try {
+      const userId = req.user._id;
+      // پیدا کردن مقالاتی که توسط کاربر وارد شده نوشته شده‌اند
+      const articles = await this.Article.find({ author: userId });
+      this.response({
+        res,
+        code: 200,
+        message: "Your articles",
+        data: articles,
+      });
+    } catch (error) {
+      this.response({
+        res,
+        code: 500,
+        message: "Something went wrong",
+      });
+    }
+  }
+  
   async editArticle(req, res) {
     res.send(`edit article`);
   }
