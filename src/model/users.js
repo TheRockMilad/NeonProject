@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
   articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }]
 }); 
 
-mongoose.plugin(timestamp);
+userSchema.plugin(timestamp);
 
 const User = mongoose.model("User", userSchema);
 
