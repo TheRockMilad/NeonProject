@@ -11,7 +11,7 @@ module.exports = new (class extends controller {
         title,
         content,
         author: user._id,
-        published : true
+        published: true,
       });
 
       const savedArticle = await newArticle.save();
@@ -39,19 +39,19 @@ module.exports = new (class extends controller {
   async showAllArticle(req, res) {
     try {
       const articles = await this.Article.find()
-        .populate('author', 'name') // اینجا نام کاربر را دریافت می‌کنیم
-        .select('title content createdAt'); // انتخاب فیلدهای مورد نظر از مقاله
-  
+        .populate("author", "name") // اینجا نام کاربر را دریافت می‌کنیم
+        .select("title content createdAt"); // انتخاب فیلدهای مورد نظر از مقاله
+
       this.response({
         res,
         code: 200,
         message: "Articles fetched successfully",
-        data: articles.map(article => ({
+        data: articles.map((article) => ({
           author: article.author.name,
           title: article.title,
           content: article.content,
-          createdAt: article.createdAt
-        }))
+          createdAt: article.createdAt,
+        })),
       });
     } catch (error) {
       this.response({
@@ -80,9 +80,55 @@ module.exports = new (class extends controller {
       });
     }
   }
-  
   async editArticle(req, res) {
-    res.send(`edit article`);
+    try {
+      // یافتن مقاله بر اساس ID
+      const article = await this.Article.findById(req.params.articleId);
+
+      // بررسی وجود مقاله
+      if (!article) {
+        return this.response({
+          res,
+          code: 404,
+          message: "This article does not exist",
+        });
+      }
+
+      // بررسی مجاز بودن کاربر برای ویرایش مقاله
+      if (!req.user._id.equals(article.author)) {
+        return this.response({
+          res,
+          code: 403,
+          message: "You are not authorized to edit this article",
+        });
+      }
+
+      // به‌روزرسانی فیلدهای مقاله
+      const updates = ["title", "content"]; // لیستی از فیلدهایی که اجازه به‌روزرسانی دارند
+      for (const field of updates) {
+        if (req.body[field] !== undefined) {
+          article[field] = req.body[field];
+        }
+      }
+
+      // ذخیره مقاله به‌روزرسانی‌شده
+      const updatedArticle = await article.save();
+
+      // ارسال پاسخ موفقیت
+      return this.response({
+        res,
+        code: 200,
+        message: "Article updated successfully",
+        data: updatedArticle,
+      });
+    } catch (error) {
+      // رسیدگی به خطاها
+      return this.response({
+        res,
+        code: 500,
+        message: "An error occurred " + error ,
+      });
+    }
   }
   async deleteArticle(req, res) {
     res.send(`delte article`);
