@@ -84,25 +84,7 @@ module.exports = new (class extends controller {
     try {
       // یافتن مقاله بر اساس ID
       const article = await this.Article.findById(req.params.articleId);
-
-      // بررسی وجود مقاله
-      if (!article) {
-        return this.response({
-          res,
-          code: 404,
-          message: "This article does not exist",
-        });
-      }
-
-      // بررسی مجاز بودن کاربر برای ویرایش مقاله
-      if (!req.user._id.equals(article.author)) {
-        return this.response({
-          res,
-          code: 403,
-          message: "You are not authorized to edit this article",
-        });
-      }
-
+      
       // به‌روزرسانی فیلدهای مقاله
       const updates = ["title", "content"]; // لیستی از فیلدهایی که اجازه به‌روزرسانی دارند
       for (const field of updates) {
@@ -110,7 +92,6 @@ module.exports = new (class extends controller {
           article[field] = req.body[field];
         }
       }
-
       // ذخیره مقاله به‌روزرسانی‌شده
       const updatedArticle = await article.save();
 
