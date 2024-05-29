@@ -126,11 +126,49 @@ module.exports = new (class extends controller {
       return this.response({
         res,
         code: 500,
-        message: "An error occurred " + error ,
+        message: "An error occurred " + error,
       });
     }
   }
   async deleteArticle(req, res) {
-    res.send(`delte article`);
+    try {
+      // یافتن مقاله بر اساس ID
+      const article = await this.Article.findById(req.params.articleId);
+
+      // بررسی وجود مقاله
+      if (!article) {
+        return this.response({
+          res,
+          code: 404,
+          message: "This article does not exist",
+        });
+      }
+
+      // بررسی مجاز بودن کاربر برای حذف مقاله
+      if (!req.user._id.equals(article.author)) {
+        return this.response({
+          res,
+          code: 403,
+          message: "You are not authorized to delete this article",
+        });
+      }
+
+      // حذف مقاله
+      await this.Article.findByIdAndDelete(req.params.articleId);
+
+      // ارسال پاسخ موفقیت
+      return this.response({
+        res,
+        code: 200,
+        message: "Article deleted successfully",
+      });
+    } catch (error) {
+      console.error(error); // چاپ خطا برای اشکال‌زدایی
+      return this.response({
+        res,
+        code: 500,
+        message: "An error occurred ",
+      });
+    }
   }
 })();
