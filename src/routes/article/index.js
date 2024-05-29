@@ -2,6 +2,7 @@ const express = require("express");
 const controller = require("./controller");
 const validator = require("./validator");
 const router = express.Router();
+const { isAuthor } = require("./../../middleware/auth");
 
 router.post(
   "/",
@@ -11,7 +12,7 @@ router.post(
 );
 router.get("/", controller.showAllArticle);
 router.get("/me", controller.userArticle);
-router.put("/:articleId", controller.editArticle);
+router.put("/:articleId", isAuthor, controller.editArticle);
 router.delete("/:articleId", controller.deleteArticle);
 
 module.exports = router;
