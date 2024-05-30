@@ -10,7 +10,10 @@ const userSchema = new mongoose.Schema({
   isAdmin: { type: Boolean, default: false },
   isActive: { type: Boolean, default: false },
   avatarUrl: { type: String, required: false },
-  articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }]
+  articles: [{ type: mongoose.Schema.Types.ObjectId, ref: "Article" }],
+  phoneNumber: { type: String, unique: true },
+  isPhoneVerified: { type: Boolean, default: false },
+  verificationCode: { type: String }
 }); 
 
 userSchema.plugin(timestamp);
