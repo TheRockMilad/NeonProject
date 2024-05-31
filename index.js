@@ -1,4 +1,5 @@
 require('express-async-errors')
+const winston = require("winston")
 const express = require("express");
 const app = express();
 const debug = require("debug")("app:main");
@@ -18,6 +19,9 @@ app.use("/api", router);
 app.use((req, res) => {
   res.status(404).send("This API does not exist");
 });
+
+winston.add(new winston.transports.File({filename : "logFile.log"}))
+
 
 mongoose
   .connect(config.get("database.address"))

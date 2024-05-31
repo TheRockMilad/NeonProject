@@ -12,7 +12,8 @@
     "lodash": "^4.17.21",
     "mongoose": "^8.4.0",
     "mongoose-timestamp": "^0.6.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "winston": "^3.13.0"
   },
   "name": "project1",
   "version": "1.0.0",
