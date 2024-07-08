@@ -2,7 +2,7 @@ const controller = require("./../controller");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const config = require("config");
+
 
 module.exports = new (class extends controller {
   async register(req, res) {
@@ -45,7 +45,7 @@ module.exports = new (class extends controller {
       });
     }
     res.clearCookie("authToken");
-    const token = await jwt.sign({ _id: user.id }, config.get("jwt"), {
+    const token = await jwt.sign({ _id: user.id }, process.env.JWT, {
       expiresIn: "1h",
     });
     res.cookie("authToken", token, { maxAge: 3600000, httpOnly: true });

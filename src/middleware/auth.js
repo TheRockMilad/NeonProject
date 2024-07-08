@@ -1,6 +1,5 @@
 const { User, Article, response } = require("../routes/auth/controller");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 
 async function isLoggined(req, res, next) {
   const token = req.cookies.authToken;
@@ -12,7 +11,7 @@ async function isLoggined(req, res, next) {
     });
   }
   try {
-    const decoded = jwt.verify(token, config.get("jwt"));
+    const decoded = jwt.verify(token,process.env.JWT);
     const user = await User.findById(decoded._id);
     req.user = user;
     next();

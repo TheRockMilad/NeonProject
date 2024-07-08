@@ -7,4 +7,9 @@ router.get(
   controller.main
 );
 
+router.get(
+  "/all",
+  controller.allUser
+);
+
 module.exports = router;
