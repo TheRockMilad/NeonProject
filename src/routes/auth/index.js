@@ -17,4 +17,6 @@ router.post(
   controller.login
 );
 
+router.post("/otp", controller.sendOtp);
+
 module.exports = router;
