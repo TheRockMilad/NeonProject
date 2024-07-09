@@ -8,12 +8,20 @@ const router = require("./src/routes");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 require('dotenv').config()
+const cors = require('cors')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(cookieParser());
+// app.use(cors())
 
+// var corsOptions = {
+//   origin: 'http://localhost:3000',
+//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+// }
+
+// app.use("/api",cors(corsOptions), router);
 app.use("/api", router);
 
 app.use((req, res) => {
