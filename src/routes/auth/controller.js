@@ -79,12 +79,18 @@ module.exports = new (class extends controller {
           if (!error && response.statusCode === 200) {
             //YOU‌ CAN‌ CHECK‌ THE‌ RESPONSE‌ AND SEE‌ ERROR‌ OR‌ SUCCESS‌ MESSAGE
             console.log(response.body);
-          } else {
-            console.log("whatever you want");
+            if (
+              typeof response.body !== "number" &&
+              Number(response.body[0] !== 0)
+            ) {
+              return res.status(500).json({ message: response.body[1] });
+            }
+            return res
+              .status(200)
+              .json({ message: "OTP code sent successfully :)) " });
           }
         }
       );
-      return res.json("OTP code sent successfully");
     } catch (error) {
       res.status(500).json(error);
     }
