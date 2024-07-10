@@ -3,6 +3,7 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const request = require("request");
+const otpModel = require("../../model/opt");
 
 module.exports = new (class extends controller {
   async register(req, res) {
@@ -60,6 +61,10 @@ module.exports = new (class extends controller {
   async sendOtp(req, res) {
     const { phone } = req.body;
     const code = Math.floor(Math.random() * 99999);
+    const now = new Date();
+    const expireAt = now.getTime() + 300000;
+    console.log("OTP Code ->", code);
+
     try {
       request.post(
         {
@@ -75,24 +80,68 @@ module.exports = new (class extends controller {
           },
           json: true,
         },
-        function (error, response, body) {
+        async function (error, response, body) {
           if (!error && response.statusCode === 200) {
             //YOU‌ CAN‌ CHECK‌ THE‌ RESPONSE‌ AND SEE‌ ERROR‌ OR‌ SUCCESS‌ MESSAGE
-            console.log(response.body);
+            console.log("Error : ", response.body[0]);
             if (
               typeof response.body !== "number" &&
-              Number(response.body[0] !== 0)
+              Number(response.body[0]) !== 0
             ) {
               return res.status(500).json({ message: response.body[1] });
             }
+
+            await otpModel.create({
+              phone,
+              code,
+              expireAt,
+            });
+
             return res
-              .status(200)
-              .json({ message: "OTP code sent successfully :)) " });
+              .status(201)
+              .json({ message: "OTP Code sent successfully :))" });
+          } else {
+            console.log("whatever you want");
           }
         }
       );
     } catch (error) {
-      res.status(500).json(error);
+      res.json(error);
+    }
+  }
+
+  async verify(req, res) {
+    const { code, phone } = req.body;
+    const otp = await otpModel.findOneAndUpdate(
+      { phone },
+      {
+        $inc: {
+          uses: 1,
+        },
+      }
+    )
+      .sort({ _id: -1 })
+      .lean(); // null | OTP -> expireAt
+
+    if (otp) {
+      const date = new Date();
+      const now = date.getTime();
+      if (otp.expireAt < now) {
+        return res.status(410).json({ message: "Code is expired !!" });
+      }
+
+      if (otp.uses > 4) {
+        return res.status(408).json({ message: "Code is max use !!" });
+      }
+
+      if (otp.code !== code) {
+        console.log(otp.code !== code);
+        return res.status(409).json({ message: "Code is not correct !!" });
+      }
+
+      return res.status(200).json({ message: "Code is correct :))" });
+    } else {
+      return res.status(409).json({ message: "Code is not correct" });
     }
   }
 })();

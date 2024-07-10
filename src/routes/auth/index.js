@@ -17,6 +17,7 @@ router.post(
   controller.login
 );
 
-router.post("/otp", controller.sendOtp);
+router.post("/sms/send", controller.sendOtp);
+router.post("/sms/verify", controller.verify);
 
 module.exports = router;
